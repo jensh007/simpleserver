@@ -1,0 +1,16 @@
+---
+name: chart
+type: helmChart
+input:
+  type: helm
+  path: helmchart
+---
+name: image
+type: ociImage
+version: 0.1.0
+input:
+  type: dockermulti
+  repository: eu.gcr.io/gardener-project/test/jensh007/simpleserver
+  variants:
+  - "eu.gcr.io/gardener-project/test/jensh007/simpleserver:0.1.0-linux-amd64"
+  - "eu.gcr.io/gardener-project/test/jensh007/simpleserver:0.1.0-linux-arm64"
