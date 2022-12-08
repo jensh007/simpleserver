@@ -9,9 +9,17 @@ jobs:
     steps:
     - name: Check out the repo
       uses: actions/checkout@v3
-    - name: build single arch docker image
-      run: make image
+    # - name: build single arch docker image
+    #   run: make image
     - name: build component archive
-      run: make ca
+      run: make MULTI=false  ca
     - name: build CTF archive
-      run: make ctf
+      run: make MULTI=false ctf
+  use-ocm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: build component archive
+        uses: open-component-model/ocm-setup-action@main
+        run: make MULTI=false ctf
