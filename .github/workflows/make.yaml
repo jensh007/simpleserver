@@ -4,25 +4,25 @@ run-name: Build image and CTF with makefile
 on:
   workflow_dispatch:
 jobs:
-  build-with-docker:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check out the repo
-      uses: actions/checkout@v3
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
-    - name: Set up Docker Context for Buildx
-      id: buildx-context
-      run: |
-        docker context create builders
-    - name: Set up Docker Buildx
-      timeout-minutes: 5
-      uses: docker/setup-buildx-action@v2
-      with:
-        version: latest
-        endpoint: builders # self-hosted
-    - name: build multi arch docker image
-      run: make multi
+  # build-with-docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Check out the repo
+  #     uses: actions/checkout@v3
+  #   - name: Set up QEMU
+  #     uses: docker/setup-qemu-action@v2
+  #   - name: Set up Docker Context for Buildx
+  #     id: buildx-context
+  #     run: |
+  #       docker context create builders
+  #   - name: Set up Docker Buildx
+  #     timeout-minutes: 5
+  #     uses: docker/setup-buildx-action@v2
+  #     with:
+  #       version: latest
+  #       endpoint: builders # self-hosted
+  #   - name: build multi arch docker image
+  #     run: make multi
   use-ocm:
     runs-on: ubuntu-latest
     steps:
@@ -41,5 +41,5 @@ jobs:
         uses: docker/setup-buildx-action@v2
         with:
           version: latest
-      - name: build component archive
-        run: make MULTI=true ctf
+      - name: build single transport archive
+        run: make MULTI=false ctf
