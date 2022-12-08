@@ -39,5 +39,7 @@ jobs:
       - name: Set up Docker Buildx
         timeout-minutes: 5
         uses: docker/setup-buildx-action@v2
+        with:
+          version: latest
       - name: build component archive
         run: make MULTI=false ctf
