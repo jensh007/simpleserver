@@ -1,6 +1,6 @@
 name: make
 # trigger manually
-run-name: Build single architecture image with makefile
+run-name: Build image and CTF with makefile
 on:
   workflow_dispatch:
 jobs:
@@ -11,3 +11,7 @@ jobs:
       uses: actions/checkout@v3
     - name: build single arch docker image
       run: make image
+    - name: build component archive
+      run: make ca
+    - name: build CTF archive
+      run: make ctf
