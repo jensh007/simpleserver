@@ -43,17 +43,47 @@ jobs:
           version: latest
       - name: build single transport archive
         run: make MULTI=false ctf
+      - name: Archive transport archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: ocm-simpleserver-$GITHUB_SHA
+          path: |
+            gen
   push:
     needs: use-ocm
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: setup OCM
         uses: open-component-model/ocm-setup-action@main
       - name: Check out the repo
         uses: actions/checkout@v3
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: test docker config
+        run: cat ~/.docker/config.json
+      - name: write OCM config file
+        run: |
+          cat > ~/.ocmconfig<< EOF
+          type: generic.config.ocm.software/v1
+          configurations:
+            - type: credentials.config.ocm.software
+              repositories:
+                - repository:
+                    type: DockerConfig/v1
+                    dockerConfigFile: "~/.docker/config.json"
+                    propagateConsumerIdentity: true
+          EOF
       - name: push CTF to OCI registry
         run: make GITHUBORG=jensh007 push
       - name: describe component version
         run: make describe
       - name: get component descriptor
         run: make descriptor
+
