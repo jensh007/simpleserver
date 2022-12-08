@@ -1,3 +1,5 @@
+# required for single platform build in a Github action, otherwise not necessary:
+ARG BUILDPLATFORM=linux/amd64
 FROM --platform=$BUILDPLATFORM golang:1.19 AS builder
 ARG TARGETOS TARGETARCH
 
