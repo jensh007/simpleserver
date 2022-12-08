@@ -42,4 +42,4 @@ jobs:
         with:
           version: latest
       - name: build component archive
-        run: make MULTI=false ctf
+        run: make MULTI=true ctf
