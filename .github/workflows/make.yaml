@@ -21,16 +21,8 @@ jobs:
       with:
         version: latest
         endpoint: builders # self-hosted
-    - name: Build arm64
-      id: build_arm64
-      uses: docker/build-push-action@v3
-      with:
-        push: false
-        load: true
-        platforms: linux/arm64
-        tags: ghcr.io/acme/simpleserver:0.1.0-linux-arm64
-    # - name: build single arch docker image
-    #   run: make multi
+    - name: build single arch docker image
+      run: make multi
   use-ocm:
     runs-on: ubuntu-latest
     steps:
