@@ -46,9 +46,9 @@ jobs:
       - name: Archive transport archive
         uses: actions/upload-artifact@v3
         with:
-          name: ocm-simpleserver-$GITHUB_SHA
+          name: ocm-simpleserver
           path: |
-            gen
+            gen/ctf
   push:
     needs: use-ocm
     runs-on: ubuntu-latest
@@ -80,6 +80,11 @@ jobs:
                     dockerConfigFile: "~/.docker/config.json"
                     propagateConsumerIdentity: true
           EOF
+      - name: Download CTF from build steps
+        uses: actions/download-artifact@v3
+        with:
+          name: ocm-simpleserver
+          path: gen/ctf
       - name: push CTF to OCI registry
         run: make GITHUBORG=jensh007 push
       - name: describe component version
