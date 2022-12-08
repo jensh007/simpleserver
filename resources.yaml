@@ -7,10 +7,9 @@ input:
 ---
 name: image
 type: ociImage
-version: 0.1.0
+version: (( values.VERSION ))
 input:
-  type: dockermulti
-  repository: eu.gcr.io/gardener-project/test/jensh007/simpleserver
-  variants:
-  - "eu.gcr.io/gardener-project/test/jensh007/simpleserver:0.1.0-linux-amd64"
-  - "eu.gcr.io/gardener-project/test/jensh007/simpleserver:0.1.0-linux-arm64"
+  type: (( bool(values.MULTI) ? "dockermulti" :"docker" ))
+  repository:  (( index(values.IMAGE, ":") >= 0 ? substr(values.IMAGE,0,index(values.IMAGE,":")) :values.IMAGE ))
+  variants: (( bool(values.MULTI) ? map[split(" ", values.PLATFORMS)|v|-> values.IMAGE "-" replace(v,"/","-")] :~~ ))
+  path: (( bool(values.MULTI) ? ~~ :values.IMAGE ))
