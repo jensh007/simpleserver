@@ -44,12 +44,13 @@ jobs:
       - name: build single transport archive
         run: make MULTI=false ctf
   push:
+    needs: use-ocm
     runs-on: ubuntu-latest
     steps:
       - name: setup OCM
         uses: open-component-model/ocm-setup-action@main
-      - name: push CTF to OCI registry
-        run: make ctf
+      - name: Check out the repo
+        uses: actions/checkout@v3
       - name: push CTF to OCI registry
         run: make GITHUBORG=jensh007 push
       - name: describe component version
