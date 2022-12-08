@@ -1,6 +1,6 @@
 name: make
 # trigger manually
-run-name: Dummy Github Action
+run-name: Build single architecture image with makefile
 on:
   workflow_dispatch:
 jobs:
