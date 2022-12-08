@@ -4,17 +4,13 @@ run-name: Build image and CTF with makefile
 on:
   workflow_dispatch:
 jobs:
-  # build-multiarch:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Check out the repo
-  #     uses: actions/checkout@v3
-    # - name: build single arch docker image
-    #   run: make image
-    # - name: build component archive
-    #   run: make MULTI=false  ca
-    # - name: build CTF archive
-    #   run: make MULTI=false ctf
+  build-singlearch:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+    - name: build single arch docker image
+      run: make image
   use-ocm:
     runs-on: ubuntu-latest
     steps:

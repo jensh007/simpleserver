@@ -1,10 +1,12 @@
-FROM golang:1.19 AS builder
+ARG BUILDPLATFORM=linux/amd64
+FROM --platform=$BUILDPLATFORM golang:1.19 AS builder
+ARG TARGETOS TARGETARCH
 
 WORKDIR /app
 COPY go.mod ./
 COPY main.go ./
 RUN go mod download
-RUN CGO_ENABLED=0 go build -o /helloserver main.go
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -o /helloserver main.go
 
 # Create a new release build stage
 FROM gcr.io/distroless/base-debian10
