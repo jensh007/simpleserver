@@ -27,8 +27,8 @@ jobs:
       uses: open-component-model/ocm-action@main
       with:
         action: push_ctf
-        comprepo_url: ghcr.io/
-        comprepo_user: $GITHUB_ACTOR
+        comprepo_url: ghcr.io/jensh007
+        comprepo_user: ${{ secrets.GITHUB_TOKEN }}
         comprepo_password: ${{ secrets.GITHUB_TOKEN }}
 
 
