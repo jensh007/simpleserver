@@ -28,7 +28,7 @@ jobs:
       with:
         action: push_ctf
         comprepo_url: ghcr.io/jensh007
-        comprepo_user: ${{ secrets.GITHUB_TOKEN }}
+        comprepo_user: ${{ env.GITHUB_ACTOR }}
         comprepo_password: ${{ secrets.GITHUB_TOKEN }}
 
 
