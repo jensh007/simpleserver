@@ -28,7 +28,7 @@ jobs:
       with:
         action: push_ctf
         comprepo_url: ghcr.io/
-        comprepo_user: ${{ GITHUB_ACTOR }}
+        comprepo_user: $GITHUB_ACTOR
         comprepo_password: ${{ secrets.GITHUB_TOKEN }}
 
 
