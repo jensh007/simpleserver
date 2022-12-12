@@ -1,0 +1,19 @@
+name: ocm-action
+# trigger manually
+run-name: Build Simple Server multiarch images
+on:
+  workflow_dispatch:
+jobs:
+  build-with-ocm-action:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+    - name: Create component
+      uses: open-component-model/ocm-action@main
+        with:
+          action: create_component
+          component: ocm-simpleserver
+          version: 1.0.0
+          provider: github.com/jensh007
+
