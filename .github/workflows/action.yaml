@@ -1,6 +1,6 @@
 name: ocm-action
 # trigger manually
-run-name: Build Simple Server multiarch images
+run-name: Build component using ocm github action
 on:
   workflow_dispatch:
 jobs:
@@ -15,7 +15,13 @@ jobs:
       uses: open-component-model/ocm-action@main
       with:
         action: create_component
-        component: ocm-simpleserver
+        component: simpleserver
         version: 1.0.0
         provider: github.com/jensh007
+    - name: Add Resources
+      uses: open-component-model/ocm-action@main
+      with:
+        action: add_resources
+        resources: resources.yaml
+
 
