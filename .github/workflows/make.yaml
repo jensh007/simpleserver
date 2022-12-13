@@ -62,11 +62,18 @@ jobs:
         with:
           name: ocm-simpleserver
           path: gen/ctf
+      - name: Debug dirs
+        run: |
+          echo "PWD: $pwd"
+          echo "gent/ctf"
+          ls -l gen/ctf
+          echo "gent/ctf/ocm-simpleserver:"
+          ls -l gen/ctf/ocm-simpleserver
       - name: Push
         uses: open-component-model/ocm-action@main
         with:
           action: push_ctf
-          ctf: gen/ctf/ocm-simpleserver
+          ctf: gen/ctf/ocm-simpleserver/ocm-simpleserver
           comprepo_url: ghcr.io/jensh007
           comprepo_user: ${{ github.actor }}
           comprepo_password: ${{ secrets.GITHUB_TOKEN }}
