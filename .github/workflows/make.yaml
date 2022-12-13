@@ -66,7 +66,7 @@ jobs:
         uses: open-component-model/ocm-action@test
         with:
           action: push_ctf
-          directory: gen/ctf
+          directory: gen/ctf/ocm-simpleserver
           comprepo_url: ghcr.io/jensh007
           comprepo_user: ${{ github.actor }}
           comprepo_password: ${{ secrets.GITHUB_TOKEN }}
