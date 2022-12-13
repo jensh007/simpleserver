@@ -64,11 +64,8 @@ jobs:
           path: gen/ctf
       - name: Debug dirs
         run: |
-          echo "PWD: $pwd"
-          echo "gent/ctf"
-          ls -l gen/ctf
-          echo "gent/ctf/ocm-simpleserver:"
-          ls -l gen/ctf/ocm-simpleserver
+          echo "gen/ctf:"
+          ls -lR gen/ctf
       - name: Push
         uses: open-component-model/ocm-action@main
         with:
