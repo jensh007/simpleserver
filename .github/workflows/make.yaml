@@ -70,7 +70,7 @@ jobs:
         uses: open-component-model/ocm-action@main
         with:
           action: push_ctf
-          ctf: gen/ctf/ocm-simpleserver/ocm-simpleserver
+          ctf: gen/ctf
           comprepo_url: ghcr.io/jensh007
           comprepo_user: ${{ github.actor }}
           comprepo_password: ${{ secrets.GITHUB_TOKEN }}
