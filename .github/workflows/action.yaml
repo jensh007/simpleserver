@@ -10,21 +10,21 @@ jobs:
     - name: Check out the repo
       uses: actions/checkout@v3
     - name: Install OCM
-      uses: open-component-model/ocm-setup-action@main
+      uses: open-component-model/ocm-setup-action@test
     - name: Create component
-      uses: open-component-model/ocm-action@main
+      uses: open-component-model/ocm-action@test
       with:
         action: create_component
         component: github.com/jenhs007/simpleserver
         version: 1.0.0
         provider: github.com/jensh007
     - name: Add Resources
-      uses: open-component-model/ocm-action@main
+      uses: open-component-model/ocm-action@test
       with:
         action: add_resources
         resources: resources.yaml
     - name: Push
-      uses: open-component-model/ocm-action@main
+      uses: open-component-model/ocm-action@test
       with:
         action: push_ctf
         comprepo_url: ghcr.io/jensh007
