@@ -10,7 +10,7 @@ jobs:
     - name: Check out the repo
       uses: actions/checkout@v3
     - name: Install OCM
-      uses: open-component-model/ocm-setup-action@test
+      uses: open-component-model/ocm-setup-action@main
     - name: Create component
       uses: open-component-model/ocm-action@test
       with:
