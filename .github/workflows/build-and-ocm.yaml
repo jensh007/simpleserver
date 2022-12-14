@@ -4,7 +4,7 @@ run-name: Build image and create component version without makefile
 on:
   workflow_dispatch:
 env:
-  VERSION: 1.0.0
+  VERSION: "1.0.0"
   COMP_NAME: acme.org/demo/simpleserver
   PROVIDER: github.com/jensh007
 jobs:
@@ -46,9 +46,9 @@ jobs:
         uses: open-component-model/ocm-action@test
         with:
           action: create_component
-          component: $COMP_NAME
-          provider: $PROVIDER
-          version: $VERSION
+          component: ${{ env.COMP_NAME }}
+          provider: ${{ env.PROVIDER }}
+          version: ${{ env.VERSION }}
       - name: add OCM resources
         uses: open-component-model/ocm-action@test
         with:
@@ -56,7 +56,7 @@ jobs:
           component: $COMP_NAME
           resources: resources.yaml
           templater: spiff
-          version: $VERSION
+          version: ${{ env.VERSION }}
       - name: create OCM transport archive
         uses: open-component-model/ocm-action@test
         with:
