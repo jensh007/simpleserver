@@ -23,7 +23,7 @@ jobs:
   #       endpoint: builders # self-hosted
   #   - name: build multi arch docker image
   #     run: make multi
-  use-ocm:
+  build-and-create-ocm:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -49,8 +49,8 @@ jobs:
           name: ocm-simpleserver
           path: |
             gen/ctf
-  push:
-    needs: use-ocm
+  push-ocm:
+    needs: build-and-create-ocm
     runs-on: ubuntu-latest
     steps:
       - name: setup OCM
@@ -67,7 +67,7 @@ jobs:
           echo "gen/ctf:"
           ls -lR gen/ctf
       - name: Push
-        uses: open-component-model/ocm-action@main
+        uses: open-component-model/ocm-action@test
         with:
           action: push_ctf
           ctf: gen/ctf
