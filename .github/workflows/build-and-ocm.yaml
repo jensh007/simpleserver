@@ -49,6 +49,8 @@ jobs:
           component: ${{ env.COMP_NAME }}
           provider: ${{ env.PROVIDER }}
           version: ${{ env.VERSION }}
+      - name: debug
+        run: ls -lR
       - name: add OCM resources
         uses: open-component-model/ocm-action@test
         with:
