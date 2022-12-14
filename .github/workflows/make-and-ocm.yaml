@@ -1,4 +1,4 @@
-name: ocm-action
+name: make-and-ocm
 # trigger manually
 run-name: Build component using ocm github action
 on:

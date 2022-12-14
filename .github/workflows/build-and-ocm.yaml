@@ -1,4 +1,4 @@
-name: build-create-ocm
+name: build-and-ocm
 # trigger manually
 run-name: Build image and create component version without makefile
 on:
