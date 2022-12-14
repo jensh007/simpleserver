@@ -67,7 +67,7 @@ jobs:
           echo "gen/ctf:"
           ls -lR gen/ctf
       - name: Push
-        uses: open-component-model/ocm-action@main
+        uses: open-component-model/ocm-action@test
         with:
           action: push_ctf
           ctf: gen/ctf
