@@ -53,7 +53,7 @@ jobs:
         uses: open-component-model/ocm-action@test
         with:
           action: add_resources
-          component: $COMP_NAME
+          component: ${{ env.COMP_NAME }}
           resources: resources.yaml
           templater: spiff
           version: ${{ env.VERSION }}
