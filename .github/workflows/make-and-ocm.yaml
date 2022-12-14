@@ -1,4 +1,4 @@
-name: ocm-action
+name: make-and-ocm
 # trigger manually
 run-name: Dummy Github Action
 on:
