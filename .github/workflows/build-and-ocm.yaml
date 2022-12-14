@@ -49,6 +49,7 @@ jobs:
         with:
           action: add_resources
           component: acme.org/demo/simpleserver
+          provider: github.com/jensh007
           resources: resources.yaml
           templater: spiff
           version: 1.0.0
