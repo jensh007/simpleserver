@@ -33,7 +33,7 @@ jobs:
           push: false
           load: true
           platforms: linux/amd64
-          tags: ghcr.io/acme/simpleserver:0.1.0-linux-amd64
+          tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-amd64
       - name: Build arm64
         id: build_arm64
         uses: docker/build-push-action@v3
@@ -41,7 +41,7 @@ jobs:
           push: false
           load: true
           platforms: linux/arm64
-          tags: ghcr.io/acme/simpleserver:0.1.0-linux-arm64
+          tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-arm64
       - name: Create OCM
         uses: open-component-model/ocm-action@test
         with:
@@ -55,7 +55,7 @@ jobs:
         run: |
           cat > gen/ocm/settings.yaml<< EOF
           MULTI: true
-          IMAGE: ghcr.io/jensh007/demo/simpleserver:1.0.0
+          IMAGE: ghcr.io/jensh007/demo/simpleserver:${{ env.VERSION }}
           PLATFORMS: "linux/amd64 linux/arm64"
           EOF
       - name: write OCM settings file
