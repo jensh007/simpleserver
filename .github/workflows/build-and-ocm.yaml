@@ -58,6 +58,9 @@ jobs:
           IMAGE: ghcr.io/jensh007/demo/simpleserver:1.0.0
           PLATFORMS: "linux/amd64 linux/arm64"
           EOF
+      - name: write OCM settings file
+        run: |
+          docker image ls
       - name: add OCM resources
         uses: open-component-model/ocm-action@test
         with:
