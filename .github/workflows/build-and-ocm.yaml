@@ -42,15 +42,13 @@ jobs:
           load: true
           platforms: linux/arm64
           tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-arm64
-      - name: Create OCM
+      - name: create OCM component version
         uses: open-component-model/ocm-action@test
         with:
           action: create_component
           component: ${{ env.COMP_NAME }}
           provider: ${{ env.PROVIDER }}
           version: ${{ env.VERSION }}
-      # - name: debug
-      #   run: ls -lR
       - name: write OCM settings file
         run: |
           cat > gen/ocm/settings.yaml<< EOF
@@ -77,6 +75,6 @@ jobs:
       - name: Upload transport archive
         uses: actions/upload-artifact@v3
         with:
-          name: ocm-simpleserver
+          name: ocm-simpleserver-ctf.zip
           path: |
             gen/ctf
