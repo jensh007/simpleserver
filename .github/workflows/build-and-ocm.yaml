@@ -49,8 +49,15 @@ jobs:
           component: ${{ env.COMP_NAME }}
           provider: ${{ env.PROVIDER }}
           version: ${{ env.VERSION }}
-      - name: debug
-        run: ls -lR
+      # - name: debug
+      #   run: ls -lR
+      - name: write OCM settings file
+        run: |
+          cat > gen/ocm/settings.yaml<< EOF
+          MULTI: true
+          IMAGE: ghcr.io/jensh007/demo/simpleserver:1.0.0
+          PLATFORMS: "linux/amd64 linux/arm64"
+          EOF
       - name: add OCM resources
         uses: open-component-model/ocm-action@test
         with:
