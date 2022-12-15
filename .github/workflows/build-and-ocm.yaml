@@ -55,7 +55,7 @@ jobs:
         run: |
           cat > gen/ocm/settings.yaml<< EOF
           MULTI: true
-          IMAGE: ghcr.io/jensh007/demo/simpleserver:${{ env.VERSION }}
+          IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
           PLATFORMS: "linux/amd64 linux/arm64"
           EOF
       - name: write OCM settings file
