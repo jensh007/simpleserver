@@ -49,13 +49,13 @@ jobs:
           component: ${{ env.COMP_NAME }}
           provider: ${{ env.PROVIDER }}
           version: ${{ env.VERSION }}
-      - name: write OCM settings file
-        run: |
-          cat > gen/ocm/settings.yaml<< EOF
-          MULTI: true
-          IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
-          PLATFORMS: "linux/amd64 linux/arm64"
-          EOF
+      # - name: write OCM settings file
+      #   run: |
+      #     cat > gen/ocm/settings.yaml<< EOF
+      #     MULTI: true
+      #     IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
+      #     PLATFORMS: "linux/amd64 linux/arm64"
+      #     EOF
       - name: add OCM resources
         uses: open-component-model/ocm-action@test
         with:
@@ -64,6 +64,10 @@ jobs:
           resources: resources.yaml
           templater: spiff
           version: ${{ env.VERSION }}
+          var_values: |
+            MULTI: true
+            IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
+            PLATFORMS: "linux/amd64 linux/arm64"
       - name: create OCM transport archive
         uses: open-component-model/ocm-action@test
         with:
