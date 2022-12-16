@@ -1,11 +1,80 @@
-name: ocm-action
+name: make
 # trigger manually
-run-name: Dummy Github Action
+run-name: Build image and CTF with makefile
 on:
   workflow_dispatch:
 jobs:
-  build-multiarch:
+  # build-with-docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Check out the repo
+  #     uses: actions/checkout@v3
+  #   - name: Set up QEMU
+  #     uses: docker/setup-qemu-action@v2
+  #   - name: Set up Docker Context for Buildx
+  #     id: buildx-context
+  #     run: |
+  #       docker context create builders
+  #   - name: Set up Docker Buildx
+  #     timeout-minutes: 5
+  #     uses: docker/setup-buildx-action@v2
+  #     with:
+  #       version: latest
+  #       endpoint: builders # self-hosted
+  #   - name: build multi arch docker image
+  #     run: make multi
+  build-and-create-ocm:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v3
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: setup OCM
+        uses: open-component-model/ocm-setup-action@main
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+      - name: Set up Docker Buildx
+        timeout-minutes: 5
+        uses: docker/setup-buildx-action@v2
+        with:
+          version: latest
+      - name: build single transport archive
+        run: make MULTI=false ctf
+      - name: Archive transport archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: ocm-simpleserver
+          path: |
+            gen/ctf
+  push-ocm:
+    needs: build-and-create-ocm
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup OCM
+        uses: open-component-model/ocm-setup-action@main
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      - name: Download CTF from build step
+        uses: actions/download-artifact@v3
+        with:
+          name: ocm-simpleserver
+          path: gen/ctf
+      - name: Debug dirs
+        run: |
+          echo "gen/ctf:"
+          ls -lR gen/ctf
+      - name: Push
+        uses: open-component-model/ocm-action@test
+        with:
+          action: push_ctf
+          ctf: gen/ctf
+          comprepo_url: ghcr.io/jensh007
+          comprepo_user: ${{ github.actor }}
+          comprepo_password: ${{ secrets.GITHUB_TOKEN }}
+      - name: describe component version
+        run: make describe
+      - name: get component descriptor
+        run: make descriptor
