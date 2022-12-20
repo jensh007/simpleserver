@@ -47,7 +47,7 @@ jobs:
           platforms: linux/arm64
           tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-arm64
       - name: create OCM component version
-        uses: open-component-model/ocm-action@test
+        uses: open-component-model/ocm-action@main
         with:
           action: create_component
           component: ${{ env.COMP_NAME }}
@@ -61,7 +61,7 @@ jobs:
       #     PLATFORMS: "linux/amd64 linux/arm64"
       #     EOF
       - name: add OCM resources
-        uses: open-component-model/ocm-action@test
+        uses: open-component-model/ocm-action@main
         with:
           action: add_resources
           component: ${{ env.COMP_NAME }}
@@ -73,7 +73,7 @@ jobs:
             IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
             PLATFORMS: "linux/amd64 linux/arm64"
       - name: create OCM transport archive
-        uses: open-component-model/ocm-action@test
+        uses: open-component-model/ocm-action@main
         with:
           action: add_component
           ctf: gen/ctf
