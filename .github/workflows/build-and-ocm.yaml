@@ -42,13 +42,33 @@ jobs:
         load: true
         platforms: linux/arm64
         tags: ghcr.io/acme/simpleserver:0.1.0-linux-arm64
-    - name: Report Image digest amd64
-      run: |
-        echo ${{ steps.build_amd64.outputs.digest }}
-        echo ${{ steps.build_amd64.outputs.imageid }}
-        echo ${{ steps.build_amd64.outputs.metadata }}
-    - name: Report Image digest arm64
-      run: |
-        echo ${{ steps.build_arm64.outputs.digest }}
-        echo ${{ steps.build_arm64.outputs.imageid }}
-        echo ${{ steps.build_arm64.outputs.metadata }}
+    - name: create OCM component version
+      uses: open-component-model/ocm-action@main
+      with:
+        action: create_component
+        component: ${{ env.COMP_NAME }}
+        provider: ${{ env.PROVIDER }}
+        version: ${{ env.VERSION }}
+    - name: add OCM resources
+      uses: open-component-model/ocm-action@main
+      with:
+        action: add_resources
+        component: ${{ env.COMP_NAME }}
+        resources: resources.yaml
+        templater: spiff
+        version: ${{ env.VERSION }}
+        var_values: |
+          MULTI: true
+          IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
+          PLATFORMS: "linux/amd64 linux/arm64"
+    - name: create OCM transport archive
+      uses: open-component-model/ocm-action@main
+      with:
+        action: add_component
+        ctf: gen/ctf
+    - name: Upload transport archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: ocm-simpleserver-ctf.zip
+        path: |
+          gen/ctf
