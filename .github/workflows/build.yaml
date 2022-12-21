@@ -1,0 +1,74 @@
+name: build
+# trigger manually
+run-name: Build Simple Server multiarch images
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+jobs:
+  build-multiarch:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v2
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    # doc: https://github.com/marketplace/actions/build-and-push-docker-images
+    - name: Build amd64
+      id: build_amd64
+      uses: docker/build-push-action@v3
+      with:
+        context: ./step-03
+        push: false
+        load: true
+        platforms: linux/amd64
+        tags: ghcr.io/acme/simpleserver:0.1.0-linux-amd64
+    - name: Build arm64
+      id: build_arm64
+      uses: docker/build-push-action@v3
+      with:
+        context: ./step-03
+        push: false
+        load: true
+        platforms: linux/arm64
+        tags: ghcr.io/acme/simpleserver:0.1.0-linux-arm64
+    - name: create OCM component version
+      uses: open-component-model/ocm-action@main
+      with:
+        action: create_component
+        component: ${{ env.COMP_NAME }}
+        provider: ${{ env.PROVIDER }}
+        version: ${{ env.VERSION }}
+    - name: add OCM resources
+      uses: open-component-model/ocm-action@main
+      with:
+        action: add_resources
+        component: ${{ env.COMP_NAME }}
+        resources: resources.yaml
+        templater: spiff
+        version: ${{ env.VERSION }}
+        var_values: |
+          MULTI: true
+          IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
+          PLATFORMS: "linux/amd64 linux/arm64"
+    - name: create OCM transport archive
+      uses: open-component-model/ocm-action@main
+      with:
+        action: add_component
+        ctf: gen/ctf
+    - name: Upload transport archive
+      uses: actions/upload-artifact@v3
+      with:
+        name: ocm-simpleserver-ctf.zip
+        path: |
+          gen/ctf
