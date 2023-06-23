@@ -78,4 +78,4 @@ jobs:
         with:
           name: ocm-simpleserver-ctf.zip
           path: |
-            gen/ctf
+            gen/ocm/ctf
