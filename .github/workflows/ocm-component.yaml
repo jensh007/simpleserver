@@ -1,0 +1,71 @@
+name: build-and-create-component-version
+# trigger manually
+run-name: Build image and create CTF using component.yaml
+on:
+  workflow_dispatch:
+env:
+  COMP_NAME: acme.org/simpleserver
+  PROVIDER: github.com/acme
+  CD_REPO: ghcr.io/jensh007/ocm
+  OCI_URL: ghcr.io/jensh007
+jobs:
+  build-and-create-ocm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+      # setup workflow to use the OCM github action:
+      - name: setup OCM
+        uses: open-component-model/ocm-setup-action@main
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Context for Buildx
+        id: buildx-context
+        run: |
+          docker context create builders
+      - name: Set up Docker Buildx
+        timeout-minutes: 5
+        uses: docker/setup-buildx-action@v2
+        with:
+          version: latest
+      - name: Get version from file
+        run: |
+          version=`cat VERSION`
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "Using version: $VERSION"
+      - name: Build amd64 and arm64
+        id: build_amd64
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}
+      # Create a common transport format (CTF) archive including the component descriptor:
+      - name: create OCM CTF
+        uses: open-component-model/ocm-action@main
+        with:
+          action: add_component
+          components: components.yaml
+          directory: .
+          version: ${{ env.VERSION }}
+          var_values: |
+            VERSION: ${{ env.VERSION}}
+            REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+            COMMIT: ${{ github.sha }}
+            IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
+      # Optional: push the component to an OCI registry
+      - name: push CTF
+        uses: open-component-model/ocm-action@fix1
+        with:
+          action: push_ctf
+          comprepo_url: ${{ env.CD_REPO}}
+          # Warning: use force_push only for development (overwrites existing components)!
+          force_push: true
+          comprepo_password: ${{ secrets.GITHUB_TOKEN }}
+      # Optional: attach the common transport format archive to the workflow run
+      - name: Upload transport archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: ocm-simpleserver-ctf.zip
+          path: |
+            gen/ctf
