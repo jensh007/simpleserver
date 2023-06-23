@@ -57,10 +57,12 @@ jobs:
           directory: .
           version: ${{ env.VERSION }}
           var_values: |
-            VERSION: ${{ env.VERSION}}
-            REPO_URL: ${{ github.server_url }}/${{ github.repository }}
             COMMIT: ${{ github.sha }}
+            NAME: ${{ env.COMP_NAME }}
             IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
+            PROVIDER: ${{ env.PROVIDER }}
+            REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+            VERSION: ${{ env.VERSION}}
       # Optional: push the component to an OCI registry
       - name: push CTF
         uses: open-component-model/ocm-action@fix1

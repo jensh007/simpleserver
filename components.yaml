@@ -1,5 +1,5 @@
 components:
-- name: ocm.software/ocmcli-image
+- name: ${COMP_NAME}
   version: ${VERSION}
   provider:
     name: ${PROVIDER}
