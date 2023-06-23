@@ -8,10 +8,10 @@ run-name: Build image and create component version without makefile
 on:
   workflow_dispatch:
 env:
-  VERSION: "1.0.0"
-  COMP_NAME: acme.org/demo/simpleserver
-  PROVIDER: github.com/jensh007
-  REPO_URL: ghcr.io/jensh007/ocm
+  COMP_NAME: acme.org/simpleserver
+  PROVIDER: github.com/acme
+  CD_REPO: ghcr.io/jensh007/ocm
+  OCI_URL: ghcr.io/jensh007
 jobs:
   build-and-create-ocm:
     runs-on: ubuntu-latest
@@ -31,6 +31,11 @@ jobs:
         uses: docker/setup-buildx-action@v2
         with:
           version: latest
+      - name: Get version from file
+        run: |
+          version=`cat VERSION`
+          echo "VERSION=$version" >> $GITHUB_ENV
+          echo "Using version: $version"
       - name: Build amd64
         id: build_amd64
         uses: docker/build-push-action@v3
@@ -38,7 +43,7 @@ jobs:
           push: false
           load: true
           platforms: linux/amd64
-          tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-amd64
+          tags: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-amd64
       - name: Build arm64
         id: build_arm64
         uses: docker/build-push-action@v3
@@ -46,7 +51,7 @@ jobs:
           push: false
           load: true
           platforms: linux/arm64
-          tags: ghcr.io/acme/simpleserver:${{ env.VERSION }}-linux-arm64
+          tags: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-arm64
       - name: create OCM component version
         uses: open-component-model/ocm-action@main
         with:
@@ -54,41 +59,31 @@ jobs:
           component: ${{ env.COMP_NAME }}
           provider: ${{ env.PROVIDER }}
           version: ${{ env.VERSION }}
-      # - name: write OCM settings file
-      #   run: |
-      #     cat > gen/ocm/settings.yaml<< EOF
-      #     MULTI: true
-      #     IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
-      #     PLATFORMS: "linux/amd64 linux/arm64"
-      #     EOF
       - name: add OCM resources
         uses: open-component-model/ocm-action@main
         with:
           action: add_resources
           component: ${{ env.COMP_NAME }}
           resources: resources.yaml
-          templater: spiff
           version: ${{ env.VERSION }}
           var_values: |
-            MULTI: true
-            IMAGE: ghcr.io/acme/simpleserver:${{ env.VERSION }}
-            PLATFORMS: "linux/amd64 linux/arm64"
+            IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
+            PLATFORMS: ["linux/amd64", "linux/arm64"]
       - name: create OCM transport archive
         uses: open-component-model/ocm-action@main
         with:
           action: add_component
-          ctf: gen/ctf
       - name: push OCM transport archive
         uses: open-component-model/ocm-action@main
         with:
           action: push_ctf
-          comprepo_user: ${{ env.GITHUB_ACTOR }}
+          # Warning: use force_push only for development (overwrites existing components)!
+          force_push: true
           comprepo_password: ${{ secrets.GITHUB_TOKEN }}
-          ctf: gen/ctf
-          comprepo_url: ${{ env.REPO_URL }}
+          comprepo_url: ${{ env.CD_REPO }}
       - name: Upload transport archive
         uses: actions/upload-artifact@v3
         with:
           name: ocm-simpleserver-ctf.zip
           path: |
-            gen/ctf
+            gen/ocm/ctf
