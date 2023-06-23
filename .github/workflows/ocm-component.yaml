@@ -38,7 +38,7 @@ jobs:
         run: |
           version=`cat VERSION`
           echo "VERSION=$version" >> $GITHUB_ENV
-          echo "Using version: $VERSION"
+          echo "Using version: $version"
       - name: Build amd64 and arm64
         id: build_amd64
         uses: docker/build-push-action@v3
