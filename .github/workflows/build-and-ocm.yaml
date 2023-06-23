@@ -68,7 +68,7 @@ jobs:
           version: ${{ env.VERSION }}
           var_values: |
             IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
-            PLATFORMS: [linux/amd64, linux/arm64]
+            PLATFORMS: [linux-amd64, linux-arm64]
       - name: create OCM transport archive
         uses: open-component-model/ocm-action@main
         with:
