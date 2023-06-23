@@ -2,9 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-name: build-and-ocm
-# trigger manually
-run-name: Build image and create component version without makefile
+name: ocm-resources
+run-name: Build component version using resources.yaml
 on:
   workflow_dispatch:
 env:

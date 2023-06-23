@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2022-2023 SAP SE or an SAP affiliate company and Open Component Model contributors.
+#
+# SPDX-License-Identifier: Apache-2.0
+
 components:
 - name: ${COMP_NAME}
   version: ${VERSION}
@@ -12,6 +16,11 @@ components:
       repoUrl: ${REPO_URL}
       commit: ${COMMIT}
   resources:
+  - name: chart
+    type: helmChart
+    input:
+      type: helm
+      path: helmchart
   - name: ocm-image
     type: ociImage
     version: ${VERSION}

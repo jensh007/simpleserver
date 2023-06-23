@@ -1,6 +1,9 @@
-name: build-and-create-component-version
-# trigger manually
-run-name: Build image and create CTF using component.yaml
+# SPDX-FileCopyrightText: 2022-2023 SAP SE or an SAP affiliate company and Open Component Model contributors.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: ocm-components
+run-name: Build component version using component.yaml
 on:
   workflow_dispatch:
 env:
