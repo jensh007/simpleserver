@@ -15,4 +15,4 @@ version: ${VERSION}
 input:
   type: "dockermulti"
   repository: ${IMAGE}
-  variants: ${PLATFORMS}
+  variants: ${VARIANTS}

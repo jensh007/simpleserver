@@ -66,9 +66,10 @@ jobs:
           component: ${{ env.COMP_NAME }}
           resources: resources.yaml
           version: ${{ env.VERSION }}
+          # Note below that you have to use double quotes for the VARIANTS value.
           var_values: |
             IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
-            PLATFORMS: "['${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-amd64', '${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-arm64']"
+            VARIANTS: "['${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-amd64', '${{ env.OCI_URL }}/${{ env.COMP_NAME }}:${{ env.VERSION }}-linux-arm64']"
       - name: create OCM transport archive
         uses: open-component-model/ocm-action@main
         with:
