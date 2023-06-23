@@ -39,11 +39,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Get version from file
-        run: |
-          version=`cat VERSION`
-          echo "VERSION=$version" >> $GITHUB_ENV
-          echo "Using version: $version"
       - name: Build amd64 and arm64
         id: build_amd64
         uses: docker/build-push-action@v3
@@ -58,7 +53,7 @@ jobs:
           action: add_component
           components: components.yaml
           directory: .
-          version: ${{ env.VERSION }}
+          version_file: VERSION
           var_values: |
             COMMIT: ${{ github.sha }}
             COMP_NAME: ${{ env.COMP_NAME }}
