@@ -58,7 +58,7 @@ jobs:
           version: ${{ env.VERSION }}
           var_values: |
             COMMIT: ${{ github.sha }}
-            NAME: ${{ env.COMP_NAME }}
+            COMP_NAME: ${{ env.COMP_NAME }}
             IMAGE: ${{ env.OCI_URL }}/${{ env.COMP_NAME }}
             PROVIDER: ${{ env.PROVIDER }}
             REPO_URL: ${{ github.server_url }}/${{ github.repository }}
